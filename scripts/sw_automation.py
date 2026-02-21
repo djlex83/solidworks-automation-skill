@@ -541,7 +541,7 @@ class FeatureOperations:
         # End type: 0 = Blind, 1 = Through All
         end_type = 1 if through_all else 0
 
-        self.conn.feature_manager.FeatureCut4(
+        self.conn.feature_manager.FeatureCut3(
             True,            # Sd - single direction
             direction < 0,   # Flip
             False,           # Dir
@@ -554,10 +554,7 @@ class FeatureOperations:
             False, False, False, False,  # OffsetReverse1/2, TranslateSurface1/2
             True,            # NormalCut
             True,            # UseFeatScope
-            True,            # UseAutoSelect
-            0,               # T0 - start condition (sketch plane)
-            0.0,             # StartOffset
-            False            # FlipStartOffset
+            True             # UseAutoSelect
         )
 
     def chamfer(self, distance: float, angle: float = 45):
