@@ -24,8 +24,12 @@ import math
 
 try:
     import win32com.client
+    import pythoncom
 except ImportError:
     raise ImportError("pywin32 nicht installiert. Bitte ausführen: pip install pywin32")
+
+# Null-IDispatch für COM-Aufrufe (ersetzt None bei Object-Parametern)
+_COM_NULL = win32com.client.VARIANT(pythoncom.VT_DISPATCH, None)
 
 
 def mm_to_m(mm: float) -> float:
@@ -82,7 +86,7 @@ class SolidWorksConnection:
     def _connect(self):
         """Stellt Verbindung zu laufender SolidWorks-Instanz her."""
         try:
-            self.app = win32com.client.gencache.EnsureDispatch("SldWorks.Application")
+            self.app = win32com.client.Dispatch("SldWorks.Application")
         except Exception as e:
             raise ConnectionError(
                 f"Konnte nicht zu SolidWorks verbinden: {e}\n"
@@ -152,7 +156,7 @@ class SketchOperations:
 
         # Ebene selektieren
         self.conn.model.Extension.SelectByID2(
-            plane_name, "PLANE", 0.0, 0.0, 0.0, False, 0, None, 0
+            plane_name, "PLANE", 0.0, 0.0, 0.0, False, 0, _COM_NULL, 0
         )
 
         # Sketch starten
@@ -637,7 +641,7 @@ class FeatureOperations:
 
             # Sketch für diese Bohrung
             self.conn.model.Extension.SelectByID2(
-                "Front Plane", "PLANE", 0.0, 0.0, 0.0, False, 0, None, 0
+                "Front Plane", "PLANE", 0.0, 0.0, 0.0, False, 0, _COM_NULL, 0
             )
             self.conn.sketch_manager.InsertSketch(True)
 
@@ -795,7 +799,7 @@ class FeatureOperations:
         plane_name = plane_map.get(base_plane, base_plane)
 
         self.conn.model.Extension.SelectByID2(
-            plane_name, "PLANE", 0.0, 0.0, 0.0, False, 0, None, 0
+            plane_name, "PLANE", 0.0, 0.0, 0.0, False, 0, _COM_NULL, 0
         )
 
         offset_m = mm_to_m(offset)
@@ -830,7 +834,7 @@ class FeatureOperations:
 
         # Spiegelebene zur Selektion hinzufügen
         self.conn.model.Extension.SelectByID2(
-            plane_name, "PLANE", 0.0, 0.0, 0.0, True, 0, None, 0
+            plane_name, "PLANE", 0.0, 0.0, 0.0, True, 0, _COM_NULL, 0
         )
 
         # Mirror Feature erstellen
@@ -1087,7 +1091,7 @@ class SolidWorksAutomation:
         else:
             # Nur App-Verbindung ohne Dokument
             try:
-                self._app = win32com.client.gencache.EnsureDispatch("SldWorks.Application")
+                self._app = win32com.client.Dispatch("SldWorks.Application")
                 print("Verbunden mit SolidWorks (kein Dokument)")
             except Exception as e:
                 raise ConnectionError(f"Konnte nicht zu SolidWorks verbinden: {e}")
@@ -1159,7 +1163,7 @@ class SolidWorksAutomation:
     def select_face(self, face_name: str):
         """Selektiert eine Fläche nach Name."""
         self._connection.model.Extension.SelectByID2(
-            face_name, "FACE", 0.0, 0.0, 0.0, False, 0, None, 0
+            face_name, "FACE", 0.0, 0.0, 0.0, False, 0, _COM_NULL, 0
         )
 
     def select_edge(self, edge_index: int = 0):
