@@ -527,7 +527,7 @@ class FeatureOperations:
                 False   # FlipStartOffset
             )
 
-    def cut(self, depth: float, direction: int = 1, through_all: bool = False):
+    def cut(self, depth: float = 10.0, direction: int = 1, through_all: bool = False):
         """
         Erstellt einen Schnitt (entfernt Material).
 
@@ -862,7 +862,7 @@ class SelectionHelper:
             append: True = zur Selektion hinzufügen, False = ersetzen
         """
         return self.conn.model.Extension.SelectByID2(
-            name, obj_type, 0.0, 0.0, 0.0, append, 0, None, 0
+            name, obj_type, 0.0, 0.0, 0.0, append, 0, _COM_NULL, 0
         )
 
     def select_by_ray(self, x: float, y: float, z: float,
@@ -916,7 +916,7 @@ class SelectionHelper:
                 edges = body.GetEdges()
                 if edges:
                     for edge in edges:
-                        edge.Select4(True, None)
+                        edge.Select4(True, _COM_NULL)
 
     def get_selection_count(self) -> int:
         """Gibt die Anzahl der selektierten Objekte zurück."""
@@ -1048,7 +1048,7 @@ class DocumentManager:
         model = self.app.ActiveDoc
         if model:
             if save:
-                model.Save3(1, None, None)
+                model.Save3(1, 0, 0)
             title = model.GetTitle
             self.app.CloseDoc(title)
             print(f"Dokument geschlossen: {title}")
@@ -1157,7 +1157,7 @@ class SolidWorksAutomation:
         if path:
             self._connection.model.SaveAs(path)
         else:
-            self._connection.model.Save3(1, None, None)
+            self._connection.model.Save3(1, 0, 0)
         print("Modell gespeichert")
 
     def select_face(self, face_name: str):
