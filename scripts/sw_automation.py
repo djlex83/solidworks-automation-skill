@@ -542,7 +542,8 @@ class FeatureOperations:
         end_type = 1 if through_all else 0
 
         flip = 1 if direction < 0 else 0
-        self.conn.feature_manager.FeatureCut2(
+        fm = self.conn.model.FeatureManager
+        fm.FeatureCut(
             1,          # Sd - single direction
             flip,       # Flip
             0,          # Dir
@@ -551,8 +552,7 @@ class FeatureOperations:
             depth_m,    # D1
             0.0,        # D2
             0, 0, 0, 0, # Dchk1, Dchk2, Ddir1, Ddir2
-            0.0, 0.0,   # Dang1, Dang2
-            1           # NormalCut
+            0.0, 0.0    # Dang1, Dang2
         )
 
     def chamfer(self, distance: float, angle: float = 45):
