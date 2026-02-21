@@ -554,7 +554,10 @@ class FeatureOperations:
             False, False, False, False,  # OffsetReverse1/2, TranslateSurface1/2
             True,            # NormalCut
             True,            # UseFeatScope
-            True             # UseAutoSelect
+            True,            # UseAutoSelect
+            0,               # T0 - start condition (sketch plane)
+            0.0,             # StartOffset
+            False            # FlipStartOffset
         )
 
     def chamfer(self, distance: float, angle: float = 45):
