@@ -97,7 +97,7 @@ class SolidWorksConnection:
             )
 
         # Prüfen ob es ein Part ist
-        doc_type = self.model.GetType()
+        doc_type = self.model.GetType
         if doc_type != 1:  # 1 = Part, 2 = Assembly, 3 = Drawing
             raise ValueError(
                 f"Aktives Dokument ist kein Part (Typ: {doc_type}).\n"
@@ -152,7 +152,7 @@ class SketchOperations:
 
         # Ebene selektieren
         self.conn.model.Extension.SelectByID2(
-            plane_name, "PLANE", 0, 0, 0, False, 0, None, 0
+            plane_name, "PLANE", 0.0, 0.0, 0.0, False, 0, None, 0
         )
 
         # Sketch starten
@@ -637,7 +637,7 @@ class FeatureOperations:
 
             # Sketch für diese Bohrung
             self.conn.model.Extension.SelectByID2(
-                "Front Plane", "PLANE", 0, 0, 0, False, 0, None, 0
+                "Front Plane", "PLANE", 0.0, 0.0, 0.0, False, 0, None, 0
             )
             self.conn.sketch_manager.InsertSketch(True)
 
@@ -795,7 +795,7 @@ class FeatureOperations:
         plane_name = plane_map.get(base_plane, base_plane)
 
         self.conn.model.Extension.SelectByID2(
-            plane_name, "PLANE", 0, 0, 0, False, 0, None, 0
+            plane_name, "PLANE", 0.0, 0.0, 0.0, False, 0, None, 0
         )
 
         offset_m = mm_to_m(offset)
@@ -830,7 +830,7 @@ class FeatureOperations:
 
         # Spiegelebene zur Selektion hinzufügen
         self.conn.model.Extension.SelectByID2(
-            plane_name, "PLANE", 0, 0, 0, True, 0, None, 0
+            plane_name, "PLANE", 0.0, 0.0, 0.0, True, 0, None, 0
         )
 
         # Mirror Feature erstellen
@@ -858,7 +858,7 @@ class SelectionHelper:
             append: True = zur Selektion hinzufügen, False = ersetzen
         """
         return self.conn.model.Extension.SelectByID2(
-            name, obj_type, 0, 0, 0, append, 0, None, 0
+            name, obj_type, 0.0, 0.0, 0.0, append, 0, None, 0
         )
 
     def select_by_ray(self, x: float, y: float, z: float,
@@ -972,7 +972,7 @@ class DocumentManager:
             model = self.app.NewPart()
 
         if model:
-            print(f"Neues Part erstellt: {model.GetTitle()}")
+            print(f"Neues Part erstellt: {model.GetTitle}")
         return model
 
     def new_assembly(self, template: str = None):
@@ -993,7 +993,7 @@ class DocumentManager:
             model = self.app.NewAssembly()
 
         if model:
-            print(f"Neue Baugruppe erstellt: {model.GetTitle()}")
+            print(f"Neue Baugruppe erstellt: {model.GetTitle}")
         return model
 
     def open(self, file_path: str):
@@ -1028,7 +1028,7 @@ class DocumentManager:
         )
 
         if model:
-            print(f"Dokument geöffnet: {model.GetTitle()}")
+            print(f"Dokument geöffnet: {model.GetTitle}")
         else:
             print(f"Fehler beim Öffnen: Error={errors}, Warning={warnings}")
 
@@ -1045,7 +1045,7 @@ class DocumentManager:
         if model:
             if save:
                 model.Save3(1, None, None)
-            title = model.GetTitle()
+            title = model.GetTitle
             self.app.CloseDoc(title)
             print(f"Dokument geschlossen: {title}")
 
@@ -1083,7 +1083,7 @@ class SolidWorksAutomation:
             self._feature = FeatureOperations(self._connection)
             self._selection = SelectionHelper(self._connection)
             print("Verbunden mit SolidWorks")
-            print(f"Aktives Dokument: {self._connection.model.GetTitle()}")
+            print(f"Aktives Dokument: {self._connection.model.GetTitle}")
         else:
             # Nur App-Verbindung ohne Dokument
             try:
@@ -1159,7 +1159,7 @@ class SolidWorksAutomation:
     def select_face(self, face_name: str):
         """Selektiert eine Fläche nach Name."""
         self._connection.model.Extension.SelectByID2(
-            face_name, "FACE", 0, 0, 0, False, 0, None, 0
+            face_name, "FACE", 0.0, 0.0, 0.0, False, 0, None, 0
         )
 
     def select_edge(self, edge_index: int = 0):
@@ -1329,7 +1329,7 @@ if __name__ == "__main__":
         sw = SolidWorksAutomation()
         print("\nVerbindung erfolgreich!")
         print(f"SolidWorks Version: {sw.app.RevisionNumber()}")
-        print(f"Dokument: {sw.model.GetTitle()}")
+        print(f"Dokument: {sw.model.GetTitle}")
         print("\nBereit für Operationen.")
     except Exception as e:
         print(f"\nFehler: {e}")
