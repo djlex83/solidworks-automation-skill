@@ -82,7 +82,7 @@ class SolidWorksConnection:
     def _connect(self):
         """Stellt Verbindung zu laufender SolidWorks-Instanz her."""
         try:
-            self.app = win32com.client.Dispatch("SldWorks.Application")
+            self.app = win32com.client.gencache.EnsureDispatch("SldWorks.Application")
         except Exception as e:
             raise ConnectionError(
                 f"Konnte nicht zu SolidWorks verbinden: {e}\n"
@@ -1087,7 +1087,7 @@ class SolidWorksAutomation:
         else:
             # Nur App-Verbindung ohne Dokument
             try:
-                self._app = win32com.client.Dispatch("SldWorks.Application")
+                self._app = win32com.client.gencache.EnsureDispatch("SldWorks.Application")
                 print("Verbunden mit SolidWorks (kein Dokument)")
             except Exception as e:
                 raise ConnectionError(f"Konnte nicht zu SolidWorks verbinden: {e}")
