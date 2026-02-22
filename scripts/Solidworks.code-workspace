@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "Solidworks",
+			"path": "../.."
+		},
+		{
+			"name": "files",
+			"path": "../../../Downloads/files"
+		}
+	],
+	"settings": {}
+}
